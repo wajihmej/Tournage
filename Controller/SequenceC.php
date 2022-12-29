@@ -24,6 +24,18 @@ class SequenceC{
             die('Erreur:' .$e->getMessage());
         }
     }
+
+    public function afficherSelectionner($idep){
+        $sql="SELECT * From seq_act_cost where id_ep='".$idep."'";
+        $db=config::getConnexion();
+        try{
+        $liste=$db->query($sql);
+        return $liste;
+        }
+        catch(Exception $e){
+            die('Erreur:' .$e->getMessage());
+        }
+    }
     function rechercherTicket($str){
         $sql="select * from Sequence where email like '".$str."%' or nom like '".$str."%'";
         $db = config::getConnexion();
@@ -48,7 +60,25 @@ class SequenceC{
         }
     }
 
-
+    
+    public function ajouterSelectionner($idact,$idcos,$idseq,$idep){
+        $sql="insert into seq_act_cost(id_act,id_cost,id_seq,id_ep) values(:idact,:idcos,:idseq,:idep)";
+        $db=config::getConnexion();
+        try{
+        $req=$db->prepare($sql);
+    
+        $req->bindValue(':idact',$idact);
+        $req->bindValue(':idcos',$idcos);
+        $req->bindValue(':idseq',$idseq);
+        $req->bindValue(':idep',$idep);
+        $req->execute();
+        }
+        catch(Exception $e){
+            die('Erreur:' .$e->getMessage());
+        }
+        
+    }
+    
 public function ajouterSequence($Sequence){
     $sql="insert into Sequence(nom,id_episode) values(:nom,:idep)";
     $db=config::getConnexion();
