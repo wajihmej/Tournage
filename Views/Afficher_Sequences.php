@@ -86,7 +86,6 @@ header('Location: Afficher_Sequences.php?id='.$id);
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sequence</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                     </tr>
@@ -98,13 +97,6 @@ header('Location: Afficher_Sequences.php?id='.$id);
                     ?>
 
                     <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $row['id']; ?></h6>
-                          </div>
-                        </div>
-                      </td>
                       <td>
                         <div class="avatar-group mt-2">
                         <div class="d-flex flex-column justify-content-center">

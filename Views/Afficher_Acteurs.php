@@ -21,8 +21,8 @@ $liste=$acteurC->afficherActeursProjet($id);
 
 if(isset($_POST['Ajouter']))
 {
-if( isset($_POST['nomac']) && isset($_POST['nomperso']) && isset($_POST['contact']) && isset($_POST['menh']) && isset($_POST['menb']) && isset($_POST['pointure']) ){
 
+  
   $filename = $_FILES["image"]["name"];
   $tempname = $_FILES["image"]["tmp_name"];
 
@@ -36,10 +36,6 @@ $acteurC->ajouterActeur($acteur);
 
 header('Location: Afficher_Acteurs.php?id='.$id);
     
-}else{
-    echo "vérifieer les champs";
-    die();
-}
 }
 ?>
 
@@ -94,7 +90,6 @@ header('Location: Afficher_Acteurs.php?id='.$id);
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom acteur</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom personnage</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Contact</th>
@@ -112,13 +107,6 @@ header('Location: Afficher_Acteurs.php?id='.$id);
                     ?>
 
                     <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $row['id']; ?></h6>
-                          </div>
-                        </div>
-                      </td>
                       <td>
                         <div class="avatar-group mt-2">
                         <div class="d-flex flex-column justify-content-center">

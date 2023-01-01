@@ -89,7 +89,6 @@ header('Location: Afficher_Selectionners.php?id='.$id);
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sequence</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom acteur</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom personnage</th>
@@ -106,13 +105,6 @@ header('Location: Afficher_Selectionners.php?id='.$id);
                     ?>
 
                     <tr>
-                    <td>
-                        <div class="avatar-group mt-2">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $row['id']; ?></h6>
-                          </div>
-                        </div>
-                      </td>
                       <?php
                         $listeSeq=$sequenceC->recupererSequence($row['id_seq']);
                           foreach ($listeSeq as $rowse) {
@@ -238,7 +230,7 @@ header('Location: Afficher_Selectionners.php?id='.$id);
                           <?php
                           foreach ($listeSequences as $rowSeq) {
                           ?>
-                                <option value="<?php echo $rowSeq['id']; ?>"> Episode : <?php echo $rowSeq['nom']; ?></option>
+                                <option value="<?php echo $rowSeq['id']; ?>"> Sequence : <?php echo $rowSeq['nom']; ?></option>
                             <?php
                           }
                             ?>
