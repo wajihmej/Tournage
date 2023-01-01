@@ -90,6 +90,14 @@ header('Location: Afficher_Selectionners.php?id='.$id);
               <div class="row">
                 <div class="col-lg-6 col-7">
                   <h6>Sequences</h6>
+                    <form class="form-inline" method="POST" action="pdfSequencesAll.php?ideq=<?php echo $id ?>" >
+                      <fieldset >
+                        <div class="form-group">  
+                        <input type="submit" name="telecharger pdf" value="telecharger pdf" class="btn btn-info">
+                        </div>
+                      </fieldset>
+                    </form>
+
                 </div>
               </div>
             </div>
