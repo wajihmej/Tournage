@@ -192,7 +192,6 @@ header('Location: Afficher_Selectionners.php?id='.$id);
                           ?>
 
                       <td class="align-middle text-center text-sm">
-                        <a href="Afficher_SequenceSelected.php?id=<?php echo $id; ?>&idseq=<?php echo $row['id']; ?>" class="btn bg-gradient-success" >Voir</a>
                         <form method="POST" action="ModifierSelectionner.php?id=<?PHP echo $id; ?>&idseqactcos=<?PHP echo $row['id']; ?>">
                           <input type="submit" class="btn btn-warning" value= "Modifier">
                         </form>
