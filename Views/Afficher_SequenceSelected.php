@@ -97,8 +97,16 @@ header('Location: Afficher_SequenceSelected.php?id='.$id.'&idseq='.$idseq);
               <div class="row">
                 <div class="col-lg-6 col-7">
                   <h6>Sequences</h6>
+                  <form class="form-inline" method="POST" action="pdfSequences.php?idseq=<?php echo $idseq ?>" >
+                      <fieldset >
+                        <div class="form-group">  
+                        <input type="submit" name="telecharger pdf" value="telecharger pdf" class="btn btn-info">
+                        </div>
+                      </fieldset>
+                    </form>
                 </div>
               </div>
+              
             </div>
             <div class="card-body px-0 pb-2">
               <div class="table-responsive">
