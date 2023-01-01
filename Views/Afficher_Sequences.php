@@ -33,6 +33,17 @@ header('Location: Afficher_Sequences.php?id='.$id);
     die();
 }
 }
+
+if(isset($_POST['Supprimer']))
+{
+  
+  $sequenceC->supprimerSelectionnerSEQ($_POST['idselect']);
+  $sequenceC->supprimerSequence($_POST['idselect']);
+
+header('Location: Afficher_Sequences.php?id='.$id);
+    
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +116,17 @@ header('Location: Afficher_Sequences.php?id='.$id);
                         </div>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <button class="btn bg-gradient-success w-40 mb-0 toast-btn" type="button" data-target="successToast">View</button>
+                      <button class="btn bg-gradient-success" type="button" data-target="successToast">View</button>
+
+                        <form method="POST" action="ModifierSequence.php?id=<?PHP echo $id; ?>&idseq=<?PHP echo $row['id']; ?>">
+                          <input type="submit" class="btn btn-warning" value= "Modifier">
+                        </form>
+
+                        <form method="POST" >
+                              <input type="hidden" value="<?PHP echo $row['id']; ?>" name="idselect">
+                              <input type="submit" class="btn bg-gradient-primary" value="Supprimer" name="Supprimer" >
+                        </form>
+
                       </td>
                     </tr>     
                     <?php

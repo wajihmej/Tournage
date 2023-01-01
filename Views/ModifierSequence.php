@@ -4,10 +4,6 @@ include  "../Controller/SequenceC.php";
 include "../Model/Sequence.php";
 include  "../Controller/EpisodeC.php";
 include "../Model/Episode.php";
-include  "../Controller/ActeurC.php";
-include "../Model/Acteur.php";
-include  "../Controller/CostumeC.php";
-include "../Model/Costume.php";
 
 $episodeC= new EpisodeC();
     if (isset($_GET['id'])){
@@ -20,28 +16,34 @@ $episodeC= new EpisodeC();
         }
 
 $sequenceC= new SequenceC();
-$acteurC= new ActeurC();
-$costumeC= new CostumeC();
 
-$listeActeur=$acteurC->afficherActeursProjet($idproj);
-$listeCostume=$costumeC->afficherCostumesProjet($idproj);
-$listeSequences=$sequenceC->afficherSequencesEpisode($id);
-$liste=$sequenceC->afficherSelectionner($id);
-if(isset($_POST['Ajouter']))
+$liste=$sequenceC->recupererSequence($_GET['idseq']);
+      foreach($liste as $rowtmp){
+      $idseq=$rowtmp['id'];
+      $nomseq=$rowtmp['nom'];
+          }
+
+if(isset($_POST['Modifier']))
 {
+if( isset($_POST['nomseq'])){
 
-$sequenceC->ajouterSelectionner($_POST['typeact'],$_POST['typecost'],$_POST['typeseq'],$id);
+$sequenceC->modifierSequence($_POST['nomseq'],$idseq);
 
-header('Location: Afficher_Selectionners.php?id='.$id);
+header('Location: Afficher_Sequences.php?id='.$id);
     
+}else{
+    echo "vérifieer les champs";
+    die();
+}
 }
 
 if(isset($_POST['Supprimer']))
 {
+  
+  $sequenceC->supprimerSelectionnerSEQ($_POST['idselect']);
+  $sequenceC->supprimerSequence($_POST['idselect']);
 
-$sequenceC->supprimerSelectionner($_POST['idselect']);
-
-header('Location: Afficher_Selectionners.php?id='.$id);
+header('Location: Afficher_Sequences.php?id='.$id);
     
 }
 
@@ -85,179 +87,17 @@ header('Location: Afficher_Selectionners.php?id='.$id);
       <div class="row">
       <div class="row mb-4">
         <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-          <div class="card">
-            <div class="card-header pb-0">
-              <div class="row">
-                <div class="col-lg-6 col-7">
-                  <h6>Sequences</h6>
-                </div>
-              </div>
-            </div>
-            <div class="card-body px-0 pb-2">
-              <div class="table-responsive">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sequence</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom acteur</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom personnage</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Image acteur</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Numero Costume</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Images Costume</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <tbody>
-                  <?php
-                        foreach ($liste as $row) {
-                    ?>
-
-                    <tr>
-                      <?php
-                        $listeSeq=$sequenceC->recupererSequence($row['id_seq']);
-                          foreach ($listeSeq as $rowse) {
-                      ?>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $rowse['nom']; ?></h6>
-                          </div>
-                        </div>
-                      </td>
-
-                      <?php
-                              }
-                        $listeAct=$acteurC->recupererActeur($row['id_act']);
-                          foreach ($listeAct as $rowac) {
-                      ?>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-
-                            <h6 class="mb-0 text-sm"><?php echo $rowac['nom_acteur']; ?></h6>
-
-
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-
-                            <h6 class="mb-0 text-sm"><?php echo $rowac['nom_personnage']; ?></h6>
-
-
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="avatar-group mt-2">
-                        <div class="d-flex flex-column justify-content-center">
-                        <img src="<?php echo $rowac['image']; ?>" heigth="200" width=150>
-                          </div>
-                        </div>
-                      </td>
-
-                      <?php
-                              }
-                        $listeCost=$costumeC->recupererCostume($row['id_cost']);
-                          foreach ($listeCost as $rowco) {
-                      ?>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $rowco['numero_costume']; ?></h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <?php
-                          $listeimg=$costumeC->afficherimages($rowco['id']);
-                          foreach ($listeimg as $row1) {
-                            ?>
-                          <div class="avatar-group mt-2">
-                          <div class="d-flex flex-column justify-content-center">
-                          <img src="<?php echo $row1['image']; ?>" heigth="200" width=150>
-                            </div>
-                          </div>
-                        <?php
-                          }
-                        ?>
-                      </td>
-
-
-                      <?php
-                              }
-                          ?>
-
-                      <td class="align-middle text-center text-sm">
-                        <button class="btn bg-gradient-success" type="button" data-target="successToast">View</button>
-                        <form method="POST" action="ModifierSelectionner.php?id=<?PHP echo $id; ?>&idseqactcos=<?PHP echo $row['id']; ?>">
-                          <input type="submit" class="btn btn-warning" value= "Modifier">
-                        </form>
-
-                        <form method="POST" >
-                              <input type="hidden" value="<?PHP echo $row['id']; ?>" name="idselect">
-                              <input type="submit" class="btn bg-gradient-primary" value="Supprimer" name="Supprimer" >
-
-                        </form>
-
-                      </td>
-                    </tr>     
-                    <?php
-                        }
-                    ?>
-
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
           <div class="card h-100">
             <div class="card-header pb-0">
-              <h6>Ajouter Sequence</h6>
+              <h6>Modifier Sequence</h6>
             </div>
             <div class="card-body p-3">
                 <form method="POST" role="form" class="text-start">
-                    <div class="input-group input-group-outline mb-3">
-                        <select class="input-group input-group-outline my-3" name="typeact">
-                          <?php
-                          foreach ($listeActeur as $rowAct) {
-                          ?>
-                                <option value="<?php echo $rowAct['id']; ?>">Acteur : <?php echo $rowAct['nom_acteur']; ?> / Personnage : <?php echo $rowAct['nom_personnage']; ?></option>
-                            <?php
-                          }
-                            ?>
-                              </select>
+                    <div class="input-group input-group-outline my-3">
+                        <input selected type="text" class="form-control" name="nomseq" placeholder="nom" value="<?php echo $nomseq ?>"> </input>
                     </div>
-                    <div class="input-group input-group-outline mb-3">
-                        <select class="input-group input-group-outline my-3" name="typecost">
-                          <?php
-                          foreach ($listeCostume as $rowCost) {
-                          ?>
-                                <option value="<?php echo $rowCost['id']; ?>"> Numero costume : <?php echo $rowCost['numero_costume']; ?> / Personnage : <?php echo $rowCost['nom_personnage']; ?></option>
-                            <?php
-                          }
-                            ?>
-                              </select>
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                        <select class="input-group input-group-outline my-3" name="typeseq">
-                          <?php
-                          foreach ($listeSequences as $rowSeq) {
-                          ?>
-                                <option value="<?php echo $rowSeq['id']; ?>"> Sequence : <?php echo $rowSeq['nom']; ?></option>
-                            <?php
-                          }
-                            ?>
-                              </select>
-                    </div>
-
                     <div class="text-center">
-                        <input type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2" value="Ajouter" name="Ajouter" >
+                        <input type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2" value="Modifier" name="Modifier" >
                     </div>
                 </form>
             </div>

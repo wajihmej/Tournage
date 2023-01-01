@@ -96,6 +96,48 @@ public function ajouterSequence($Sequence){
     }
     
 }
+
+
+function recupererSeqActCos($id){
+    $sql="SELECT * from seq_act_cost where id=$id";
+    $db = config::getConnexion();
+    try{
+    $liste=$db->query($sql);
+    return $liste;
+    }
+    catch (Exception $e){
+        die('Erreur: '.$e->getMessage());
+    }
+}
+
+public function supprimerSelectionner($id){
+    $sql="DELETE FROM seq_act_cost where id=:id";
+    $db=config::getConnexion();
+    try{
+    $req=$db->prepare($sql);
+    $req->bindValue(':id',$id);
+    $req->execute();
+    }
+    catch(Exception $e){
+        die('Erreur:' .$e->getMessage());
+    }
+    
+}
+
+public function supprimerSelectionnerSEQ($id){
+    $sql="DELETE FROM seq_act_cost where id_seq=:id";
+    $db=config::getConnexion();
+    try{
+    $req=$db->prepare($sql);
+    $req->bindValue(':id',$id);
+    $req->execute();
+    }
+    catch(Exception $e){
+        die('Erreur:' .$e->getMessage());
+    }
+    
+}
+
 public function supprimerSequence($id){
     $sql="DELETE FROM Sequence where id=:id";
     $db=config::getConnexion();
@@ -111,19 +153,41 @@ public function supprimerSequence($id){
 }
 
     
-    function modifierSequence($Sequence,$id){
-        $sql="UPDATE Sequence SET nom=:nom,id_episode=:idep WHERE id=:id";
+    function modifierSequence($nom,$id){
+        $sql="UPDATE Sequence SET nom=:nom WHERE id=:id";
         
         $db = config::getConnexion();
         //$db->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
 try{        
         $req=$db->prepare($sql);
-        $nom=$Sequence->getNom();
-        $idep=$Sequence->getIdEp();
         $req->bindValue(':id',$id);
 
         $req->bindValue(':nom',$nom);
-        $req->bindValue(':idep',$idep);
+        $datas = array(':id'=>$id, ':nom'=>$nom);
+
+            $s=$req->execute();
+            
+           // header('Location: index.php');
+        }
+        catch (Exception $e){
+            echo " Erreur ! ".$e->getMessage();
+   echo " Les datas : " ;
+  print_r($datas);
+        }
+        
+    }
+
+    function modifierSelectionner($idactseqcos,$idact,$idcos,$idseq){
+        $sql="UPDATE seq_act_cost SET id_seq=:idseq,id_act=:idact,id_cost=:idcos WHERE id=:idactseqcos";
+        
+        $db = config::getConnexion();
+        //$db->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
+try{        
+        $req=$db->prepare($sql);
+        $req->bindValue(':idactseqcos',$idactseqcos);
+        $req->bindValue(':idact',$idact);
+        $req->bindValue(':idcos',$idcos);
+        $req->bindValue(':idseq',$idseq);
         $datas = array(':id'=>$id, ':nom'=>$nom, ':idep'=>$idep);
 
             $s=$req->execute();
@@ -137,5 +201,6 @@ try{
         }
         
     }
+
 }
 ?>
