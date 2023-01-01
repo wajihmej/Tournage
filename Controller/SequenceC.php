@@ -36,6 +36,18 @@ class SequenceC{
             die('Erreur:' .$e->getMessage());
         }
     }
+
+    public function afficherSelectionnerSeq($idseq){
+        $sql="SELECT * From seq_act_cost where id_seq='".$idseq."'";
+        $db=config::getConnexion();
+        try{
+        $liste=$db->query($sql);
+        return $liste;
+        }
+        catch(Exception $e){
+            die('Erreur:' .$e->getMessage());
+        }
+    }
     function rechercherTicket($str){
         $sql="select * from Sequence where email like '".$str."%' or nom like '".$str."%'";
         $db = config::getConnexion();

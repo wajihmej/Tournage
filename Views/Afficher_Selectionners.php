@@ -200,7 +200,6 @@ header('Location: Afficher_Selectionners.php?id='.$id);
                         <form method="POST" >
                               <input type="hidden" value="<?PHP echo $row['id']; ?>" name="idselect">
                               <input type="submit" class="btn bg-gradient-primary" value="Supprimer" name="Supprimer" >
-
                         </form>
 
                       </td>
