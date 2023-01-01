@@ -48,6 +48,28 @@ class SequenceC{
             die('Erreur:' .$e->getMessage());
         }
     }
+    public function afficherSelectionnerAct($idact){
+        $sql="SELECT * From seq_act_cost where id_act='".$idact."'";
+        $db=config::getConnexion();
+        try{
+        $liste=$db->query($sql);
+        return $liste;
+        }
+        catch(Exception $e){
+            die('Erreur:' .$e->getMessage());
+        }
+    }
+    public function afficherSelectionnerCos($idcos){
+        $sql="SELECT * From seq_act_cost where id_cost='".$idcos."'";
+        $db=config::getConnexion();
+        try{
+        $liste=$db->query($sql);
+        return $liste;
+        }
+        catch(Exception $e){
+            die('Erreur:' .$e->getMessage());
+        }
+    }
     function rechercherTicket($str){
         $sql="select * from Sequence where email like '".$str."%' or nom like '".$str."%'";
         $db = config::getConnexion();
@@ -137,7 +159,34 @@ public function supprimerSelectionner($id){
 }
 
 public function supprimerSelectionnerSEQ($id){
-    $sql="DELETE FROM seq_act_cost where id_seq=:id";
+    $sql="DELETE FROM seq_act_cost where id_seq='".$id."'";
+    $db=config::getConnexion();
+    try{
+    $req=$db->prepare($sql);
+    $req->bindValue(':id',$id);
+    $req->execute();
+    }
+    catch(Exception $e){
+        die('Erreur:' .$e->getMessage());
+    }
+    
+}
+public function supprimerSelectionnerAct($id){
+    $sql="DELETE FROM seq_act_cost where id_act='".$id."'";
+    $db=config::getConnexion();
+    try{
+    $req=$db->prepare($sql);
+    $req->bindValue(':id',$id);
+    $req->execute();
+    }
+    catch(Exception $e){
+        die('Erreur:' .$e->getMessage());
+    }
+    
+}
+
+public function supprimerSelectionnerCos($id){
+    $sql="DELETE FROM seq_act_cost where id_cost='".$id."'";
     $db=config::getConnexion();
     try{
     $req=$db->prepare($sql);

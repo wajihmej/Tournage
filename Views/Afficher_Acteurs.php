@@ -4,6 +4,7 @@ include  "../Controller/ProjetC.php";
 include "../Model/Projet.php";
 include  "../Controller/ActeurC.php";
 include "../Model/Acteur.php";
+include  "../Controller/SequenceC.php";
 
 $proj= new ProjetC();
     if (isset($_GET['id'])){
@@ -37,6 +38,17 @@ $acteurC->ajouterActeur($acteur);
 header('Location: Afficher_Acteurs.php?id='.$id);
     
 }
+
+if(isset($_POST['Supprimer']))
+{
+$sequenceC= new SequenceC();
+
+$sequenceC->supprimerSelectionnerAct($_POST['idselect']);
+$acteurC->supprimerActeur($_POST['idselect']);
+header('Location: Afficher_Acteurs.php?id='.$id);
+    
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -157,7 +169,16 @@ header('Location: Afficher_Acteurs.php?id='.$id);
                         </div>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <button class="btn bg-gradient-success" type="button" data-target="successToast">View</button>
+                        <a href="Afficher_SequencesActeur.php?id=<?php echo $id; ?>&idAct=<?php echo $row['id']; ?>" class="btn bg-gradient-success" >Voir</a>
+                        <form method="POST" action="ModifierActeur.php?id=<?PHP echo $id; ?>&idseqactcos=<?PHP echo $row['id']; ?>">
+                          <input type="submit" class="btn btn-warning" value= "Modifier">
+                        </form>
+
+                        <form method="POST" >
+                              <input type="hidden" value="<?PHP echo $row['id']; ?>" name="idselect">
+                              <input type="submit" class="btn bg-gradient-primary" value="Supprimer" name="Supprimer" >
+                        </form>
+
                       </td>
                     </tr>     
                     <?php

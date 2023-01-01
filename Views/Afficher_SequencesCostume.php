@@ -1,12 +1,20 @@
 <?php
 
-include  "../Controller/ProjetC.php";
-include "../Model/Projet.php";
+include  "../Controller/SequenceC.php";
+include "../Model/Sequence.php";
+include  "../Controller/EpisodeC.php";
+include "../Model/Episode.php";
+include  "../Controller/ActeurC.php";
+include "../Model/Acteur.php";
 include  "../Controller/CostumeC.php";
 include "../Model/Costume.php";
-include  "../Controller/SequenceC.php";
+include  "../Controller/ProjetC.php";
 
+$acteurC= new ActeurC();
 $proj= new ProjetC();
+$sequenceC= new SequenceC();
+$costumeC= new CostumeC();
+
     if (isset($_GET['id'])){
         $result=$proj->recupererProjet($_GET['id']);
         foreach($result as $row){
@@ -16,51 +24,25 @@ $proj= new ProjetC();
             }
         }
 
-$costumeC= new CostumeC();
+    if (isset($_GET['idCos'])){
+        $rst=$costumeC->recupererCostume($_GET['idCos']);
+        foreach($rst as $roww){
+        $numCoss=$roww['numero_costume'];
+        $nomPerso=$roww['nom_personnage'];        
+            }
+        }
 
-$liste=$costumeC->afficherCostumesProjet($id);
+        
+
+$liste=$sequenceC->afficherSelectionnerCos($_GET['idCos']);
+
 if(isset($_POST['Supprimer']))
 {
-$sequenceC= new SequenceC();
-$sequenceC->supprimerSelectionnerCos($_POST['idselect']);
-$costumeC->supprimerCostumeImg($_POST['idselect']);
-$costumeC->supprimerCostume($_POST['idselect']);
-header('Location: Afficher_Costumes.php?id='.$id);
+
+$sequenceC->supprimerSelectionner($_POST['idselect']);
+
+header('Location: Afficher_SequencesCostume.php?id='.$id.'&idCos='.$_POST['idselect']);
     
-}
-
-if(isset($_POST['Ajouter']))
-{
-if( isset($_POST['numcost']) && isset($_POST['nomperso']) && isset($_POST['description'])  ){
-$costume=new Costume($_POST['numcost'],$_POST['nomperso'],$_POST['description'],$id);
-
-$costumeC->ajouterCostume($costume);
-$tmpcost=$costumeC->recupererCostumeByNum($_POST['numcost']);
-foreach($tmpcost as $tmprow){
-  $idcost=$tmprow['id'];
-      }
-
-$countfiles= count($_FILES["images"]["name"]);
-for( $i= 0;$i<$countfiles;$i++)
-{
-  $filename = $_FILES["images"]["name"][$i];
-  $tempname = $_FILES["images"]["tmp_name"][$i];
-  $folder = "./images/Costumes /".$filename ;
-
-
-  $costumeC->ajouterCostumeImg($idcost,$folder);
-
-  move_uploaded_file($tempname, $folder);
-
-}
-
-
-header('Location: Afficher_Costumes.php?id='.$id);
-    
-}else{
-    echo "vérifieer les champs";
-    die();
-}
 }
 
 ?>
@@ -102,12 +84,12 @@ header('Location: Afficher_Costumes.php?id='.$id);
     <div class="container-fluid py-4">
       <div class="row">
       <div class="row mb-4">
-        <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
+        <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
           <div class="card">
             <div class="card-header pb-0">
               <div class="row">
                 <div class="col-lg-6 col-7">
-                  <h6>Costumes</h6>
+                  <h6>Sequences Costume : <?php echo $numCoss ?> / Personnage : <?php echo $nomPerso ?> </h6>
                 </div>
               </div>
             </div>
@@ -116,10 +98,12 @@ header('Location: Afficher_Costumes.php?id='.$id);
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Numero costume</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sequence</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom acteur</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom personnage</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Images</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Image acteur</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Numero Costume</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Images Costume</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                     </tr>
                   </thead>
@@ -130,30 +114,66 @@ header('Location: Afficher_Costumes.php?id='.$id);
                     ?>
 
                     <tr>
+                      <?php
+                        $listeSeq=$sequenceC->recupererSequence($row['id_seq']);
+                          foreach ($listeSeq as $rowse) {
+                      ?>
                       <td>
-                        <div class="avatar-group mt-2">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $row['numero_costume']; ?></h6>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm"><?php echo $rowse['nom']; ?></h6>
+                          </div>
+                        </div>
+                      </td>
+
+                      <?php
+                              }
+                        $listeAct=$acteurC->recupererActeur($row['id_act']);
+                          foreach ($listeAct as $rowac) {
+                      ?>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+
+                            <h6 class="mb-0 text-sm"><?php echo $rowac['nom_acteur']; ?></h6>
+
+
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+
+                            <h6 class="mb-0 text-sm"><?php echo $rowac['nom_personnage']; ?></h6>
+
+
                           </div>
                         </div>
                       </td>
                       <td>
                         <div class="avatar-group mt-2">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $row['nom_personnage']; ?></h6>
+                        <img src="<?php echo $rowac['image']; ?>" heigth="200" width=150>
                           </div>
                         </div>
                       </td>
+
+                      <?php
+                              }
+                        $listeCost=$costumeC->recupererCostume($row['id_cost']);
+                          foreach ($listeCost as $rowco) {
+                      ?>
                       <td>
-                        <div class="avatar-group mt-2">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $row['Description']; ?></h6>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm"><?php echo $rowco['numero_costume']; ?></h6>
                           </div>
                         </div>
                       </td>
                       <td>
                         <?php
-                          $listeimg=$costumeC->afficherimages($row['id']);
+                          $listeimg=$costumeC->afficherimages($rowco['id']);
                           foreach ($listeimg as $row1) {
                             ?>
                           <div class="avatar-group mt-2">
@@ -165,9 +185,14 @@ header('Location: Afficher_Costumes.php?id='.$id);
                           }
                         ?>
                       </td>
+
+
+                      <?php
+                              }
+                          ?>
+
                       <td class="align-middle text-center text-sm">
-                        <a href="Afficher_SequencesCostume.php?id=<?php echo $id; ?>&idCos=<?php echo $row['id']; ?>" class="btn bg-gradient-success" >Voir</a>
-                        <form method="POST" action="ModifierActeur.php?id=<?PHP echo $id; ?>&idseqactcos=<?PHP echo $row['id']; ?>">
+                        <form method="POST" action="ModifierSelectionner.php?id=<?PHP echo $id; ?>&idseqactcos=<?PHP echo $row['id']; ?>">
                           <input type="submit" class="btn btn-warning" value= "Modifier">
                         </form>
 
@@ -175,6 +200,7 @@ header('Location: Afficher_Costumes.php?id='.$id);
                               <input type="hidden" value="<?PHP echo $row['id']; ?>" name="idselect">
                               <input type="submit" class="btn bg-gradient-primary" value="Supprimer" name="Supprimer" >
                         </form>
+
                       </td>
                     </tr>     
                     <?php
@@ -184,35 +210,6 @@ header('Location: Afficher_Costumes.php?id='.$id);
                   </tbody>
                 </table>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="card h-100">
-            <div class="card-header pb-0">
-              <h6>Ajouter Costume</h6>
-            </div>
-            <div class="card-body p-3">
-            <form method="POST" role="form" class="text-start" enctype="multipart/form-data">
-                    <div class="input-group input-group-outline my-3">
-                        <label class="form-label">Numero costume</label>
-                        <input type="text" class="form-control" name="numcost">
-                    </div>
-                    <div class="input-group input-group-outline my-3">
-                        <label class="form-label">Nom personnage</label>
-                        <input type="text" class="form-control" name="nomperso">
-                    </div>
-                    <div class="input-group input-group-outline my-3">
-                        <label class="form-label">Description</label>
-                        <input type="text" class="form-control" name="description">
-                    </div>
-                    <div class="input-group input-group-outline my-3">
-                                <input class="form-control" multiple type="file" name="images[]" >
-                    </div>
-                    <div class="text-center">
-                        <input type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2" value="Ajouter" name="Ajouter" >
-                    </div>
-                </form>
             </div>
           </div>
         </div>

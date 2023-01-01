@@ -113,12 +113,23 @@ public function ajouterCostume($Costume){
     
 }
         
-public function supprimerCostume($id){
-    $sql="DELETE FROM Costume where id=:id";
+public function supprimerCostumeImg($id){
+    $sql="DELETE FROM imagescost where idcost='".$id."'";
     $db=config::getConnexion();
     try{
     $req=$db->prepare($sql);
-    $req->bindValue(':id',$id);
+    $req->execute();
+    }
+    catch(Exception $e){
+        die('Erreur:' .$e->getMessage());
+    }
+    
+}
+public function supprimerCostume($id){
+    $sql="DELETE FROM Costume where id='".$id."'";
+    $db=config::getConnexion();
+    try{
+    $req=$db->prepare($sql);
     $req->execute();
     }
     catch(Exception $e){
